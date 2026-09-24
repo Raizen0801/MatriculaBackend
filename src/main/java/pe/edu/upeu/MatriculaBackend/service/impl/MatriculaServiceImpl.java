@@ -171,6 +171,7 @@ public class MatriculaServiceImpl implements MatriculaService {
                 .fechaCreacion(m.getFechaCreacion())
                 .build();
     }
+
     @Override
     @Transactional(readOnly = true)
     public List<MatriculaResponseDTO> obtenerHistorialEstudiante(Long estudianteId, String periodo) {
@@ -181,5 +182,41 @@ public class MatriculaServiceImpl implements MatriculaService {
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public MatriculaResponseDTO retirarCurso(Long matriculaId, Long cursoId) {
+        Matricula matricula = matriculaRepository.findById(matriculaId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Matrícula no encontrada con ID: " + matriculaId));
+
+        if (matricula.getEstado() != EstadoMatricula.REGISTRADA) {
+            throw new ReglaNegocioException("Solo se pueden retirar cursos de matrículas en estado REGISTRADA");
+        }
+
+        if (matricula.getDetalles().size() <= 1) {
+            throw new ReglaNegocioException("No se permite dejar la matrícula sin cursos");
+        }
+
+        DetalleMatricula detalleAEliminar = matricula.getDetalles().stream()
+                .filter(d -> d.getCurso().getId().equals(cursoId))
+                .findFirst()
+                .orElseThrow(() -> new RecursoNoEncontradoException("El curso no pertenece a esta matrícula"));
+
+        Curso curso = detalleAEliminar.getCurso();
+        curso.setVacantes(curso.getVacantes() + 1);
+        cursoRepository.save(curso);
+
+        matricula.getDetalles().remove(detalleAEliminar);
+
+        int totalCreditos = matricula.getDetalles().stream()
+                .mapToInt(d -> d.getCurso().getCreditos())
+                .sum();
+        BigDecimal costoTotal = costoPorCredito.multiply(BigDecimal.valueOf(totalCreditos)).setScale(2, RoundingMode.HALF_UP);
+
+        matricula.setTotalCreditos(totalCreditos);
+        matricula.setMontoTotal(costoTotal);
+
+        return mapToResponse(matriculaRepository.save(matricula));
     }
 }
