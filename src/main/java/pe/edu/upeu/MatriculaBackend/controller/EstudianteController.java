@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upeu.MatriculaBackend.dto.EstudianteRequestDTO;
 import pe.edu.upeu.MatriculaBackend.dto.EstudianteResponseDTO;
+import pe.edu.upeu.MatriculaBackend.dto.MatriculaResponseDTO;
 import pe.edu.upeu.MatriculaBackend.service.service.EstudianteService;
+import pe.edu.upeu.MatriculaBackend.service.service.MatriculaService;
 
 import java.util.List;
 
@@ -45,10 +47,18 @@ public class EstudianteController {
         return ResponseEntity.ok(estudianteService.readAll());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}   ")
     @Operation(summary = "Eliminar un estudiante por ID")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         estudianteService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    private final MatriculaService matriculaService;
+
+    @GetMapping("/{id}/matriculas")
+    public ResponseEntity<List<MatriculaResponseDTO>> obtenerHistorialMatriculas(
+            @PathVariable Long id,
+            @RequestParam(required = false) String periodo) {
+        return ResponseEntity.ok(matriculaService.obtenerHistorialEstudiante(id, periodo));
     }
 }
