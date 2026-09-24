@@ -1,7 +1,6 @@
 package pe.edu.upeu.MatriculaBackend.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,9 +14,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Matrícula API")
                         .version("v1")
-                        .description("API REST para el sistema de matrícula académica EduAndes")
-                        .contact(new Contact()
-                                .name("Diego Arturo Daniel Armas")
-                                .email("diego.armas@upeu.edu.pe")));
+                        .description("API REST para el sistema de matrícula académica EduAndes"));
     }
 }
