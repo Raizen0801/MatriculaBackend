@@ -44,6 +44,9 @@ public class Matricula {
     @OneToMany(mappedBy = "matricula", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleMatricula> detalles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "matricula", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleMatricula> detalles = new ArrayList<>();
+
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 
