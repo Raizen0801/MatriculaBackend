@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
+
+logging:
+  level:
+    root: WARN
+    pe.edu.upeu.MatriculaBackend: INFO
+    org.hibernate.SQL: WARN
+
+app:
+  cors:
+    allowed-origins: ${FRONTEND_ORIGINS:http://localhost:4200}

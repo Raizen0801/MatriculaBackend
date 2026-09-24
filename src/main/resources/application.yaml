@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: MatriculaBackend
+  profiles:
+    active: dev
+
+server:
+  port: 8080
+
+matricula:
+  costo-credito: 120.00

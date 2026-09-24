@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1522/FREEPDB1
+    username: MATRIDB
+    password: "123456"
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  override-with-generic-response: false
+
+logging:
+  level:
+    root: INFO
+    pe.edu.upeu.MatriculaBackend: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+app:
+  cors:
+    allowed-origins: "http://localhost:4200"
