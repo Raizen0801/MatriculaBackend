@@ -44,4 +44,10 @@ public class MatriculaController {
     public ResponseEntity<MatriculaResponseDTO> anular(@PathVariable Long id) {
         return ResponseEntity.ok(matriculaService.anular(id));
     }
+    @DeleteMapping("/{id}/cursos/{cursoId}")
+    public ResponseEntity<MatriculaResponseDTO> retirarCurso(
+            @PathVariable Long id,
+            @PathVariable Long cursoId) {
+        return ResponseEntity.ok(matriculaService.retirarCurso(id, cursoId));
+    }
 }
