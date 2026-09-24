@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -169,5 +170,16 @@ public class MatriculaServiceImpl implements MatriculaService {
                 .detalles(detallesDTO)
                 .fechaCreacion(m.getFechaCreacion())
                 .build();
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<MatriculaResponseDTO> obtenerHistorialEstudiante(Long estudianteId, String periodo) {
+        if (!estudianteRepository.existsById(estudianteId)) {
+            throw new RecursoNoEncontradoException("Estudiante no encontrado con ID: " + estudianteId);
+        }
+        return matriculaRepository.findHistorialByEstudiante(estudianteId, periodo)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 }
